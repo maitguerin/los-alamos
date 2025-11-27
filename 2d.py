@@ -8,8 +8,8 @@ logger = logging.getLogger(__name__)
 
 Lx = 200
 Ly = 200
-Nx = 128
-Ny = 128
+Nx = 256
+Ny = 256
 dtype = np.float64
 
 coords = d3.CartesianCoordinates('x','y')
@@ -31,18 +31,18 @@ g_accel = 9.8
 
 x_local = dist.local_grids(xbasis)[0]
 y_local = dist.local_grids(ybasis)[0]
-
+a=0.25
 #Set inital conditions
 b['g'] = -1
-H['g'] = 1 -((
-    np.tanh(x_local - 104.0 * np.ones_like(x_local))
-    - np.tanh(x_local - 96.0 * np.ones_like(x_local))
-))*(np.tanh(y_local - 104.0 * np.ones_like(y_local))
-    - np.tanh(y_local - 96.0 * np.ones_like(y_local)))
-H['g']=1 -0.5*((
-    np.tanh(x_local - 104.0 * np.ones_like(x_local))
-    - np.tanh(x_local - 96.0 * np.ones_like(x_local))
-))
+H['g'] = 1 +0.25*((
+    np.tanh(a*(x_local - 120.0) * np.ones_like(x_local))
+    - np.tanh(a*(x_local - 80.0) * np.ones_like(x_local))
+))*(np.tanh(a*(y_local - 104.0) * np.ones_like(y_local))
+    - np.tanh(a*(y_local - 96.0) * np.ones_like(y_local)))
+#H['g']=1 -0.5*((
+ #   np.tanh(x_local - 104.0 * np.ones_like(x_local))
+ #   - np.tanh(x_local - 96.0 * np.ones_like(x_local))
+#))
 u['g'] = 0.0
 v['g'] = 0.0
 
@@ -81,7 +81,7 @@ problem.add_equation(
 solver = problem.build_solver(dc.timesteppers.RK443)
 
 timestep = 0.00005
-t_final = 1
+t_final = 0.2
 
 solver.stop_sim_time = t_final
 solver.stop_iteration = int(t_final / timestep) + 1
@@ -103,9 +103,27 @@ cfl.add_velocity(v_vec)
 while solver.proceed:
     # Mirror scalar u into vector proxy for CFL
     u_vec['g'][0] = u['g']
+    v_vec['g'][0] = v['g']
 
     dt = cfl.compute_timestep()
     solver.step(dt)
     if solver.iteration % 1000 == 0:
         logger.info("Completed iteration %d at t = %.3f, dt = %.3e",
                     solver.iteration, solver.sim_time, dt)
+
+u_final = u.allgather_data('g')
+v_final = v.allgather_data('g')
+H_final = H.allgather_data('g')
+
+x_global = xbasis.global_grid(dist, scale=1)
+y_global = ybasis.global_grid(dist, scale=1)
+
+plt.figure()
+plt.plot(x_global,u_final)
+plt.plot(x_global,H_final)
+plt.savefig('plots/profiles_final_2d.png', dpi=200)
+
+plt.figure()
+#plt.contour(np.meshgrid(np.array(x_global),np.array(np.transpose(y_global))),np.array(H_final))
+plt.pcolormesh(H_final)
+plt.savefig('plots/profiles_final_2dgrid.png', dpi=200)
