@@ -8,8 +8,8 @@ logger = logging.getLogger(__name__)
 
 Lx = 200
 Ly = 200
-Nx = 256
-Ny = 256
+Nx = 128
+Ny = 128
 dtype = np.float64
 
 coords = d3.CartesianCoordinates('x','y')
@@ -31,7 +31,7 @@ g_accel = 9.8
 
 x_local = dist.local_grids(xbasis)[0]
 y_local = dist.local_grids(ybasis)[0]
-a=0.25
+a=0.5
 #Set inital conditions
 b['g'] = -1
 H['g'] = 1 +0.25*((
@@ -61,7 +61,7 @@ problem.add_equation(
     "-2*dx(u)*(u-(c*c)/12*(dx(dx(u))+dx(dy(v))))"
     "-dx(v)*(v-(c*c)/12*(dx(dy(u))+dy(dy(v))))"
     "-dy(v)*(u-(c*c)/12*(dx(dx(u))+dx(dy(v))))"
-    "+g_accel/c*dx(H-b)"
+    "-g_accel/c*dx(H-b)"
     )
 
 problem.add_equation(
@@ -71,7 +71,7 @@ problem.add_equation(
     "-dy(u)*(u-(c*c)/12*(dx(dx(u))+dx(dy(v))))"
     "-2*dy(v)*(v-(c*c)/12*(dx(dy(u))+dy(dy(v))))"
     "-dx(u)*(v-(c*c)/12*(dx(dy(u))+dy(dy(v))))"
-    "+g_accel/c*dy(H-b)"
+    "-g_accel/c*dy(H-b)"
     )
 
 problem.add_equation(
@@ -80,8 +80,8 @@ problem.add_equation(
 
 solver = problem.build_solver(dc.timesteppers.RK443)
 
-timestep = 0.00005
-t_final = 0.2
+timestep = 0.001
+t_final = 0
 
 solver.stop_sim_time = t_final
 solver.stop_iteration = int(t_final / timestep) + 1
