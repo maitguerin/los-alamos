@@ -8,8 +8,8 @@ logger = logging.getLogger(__name__)
 
 Lx = 200
 Ly = 200
-Nx = 512
-Ny = 512
+Nx = 256
+Ny = 256
 dtype = np.float64
 
 coords = d3.CartesianCoordinates('x','y')
@@ -21,12 +21,13 @@ u = dist.Field(name='u', bases=(xbasis,ybasis))
 v = dist.Field(name='v', bases=(xbasis,ybasis))
 H = dist.Field(name='H', bases=(xbasis,ybasis))
 b = dist.Field(name='b', bases=(xbasis,ybasis))
+K = dist.Field(name='K', bases=(xbasis,ybasis))
 
 # Vector proxy for CFL (same spatial dependence as u)
 u_vec = dist.VectorField(coords, name='u_vec', bases=(xbasis,ybasis))
 v_vec = dist.VectorField(coords, name='v_vec', bases=(xbasis,ybasis))
 
-c = 1.0
+c = 1
 g_accel = 9.8
 
 x_local = dist.local_grids(xbasis)[0]
@@ -34,61 +35,49 @@ y_local = dist.local_grids(ybasis)[0]
 
 a = 1 #steepness of initial lock release
 
-#Set inital conditions
-b['g'] = 0
-H['g'] = 1+0.5*((
-    np.tanh(a*(x_local - 120.0) * np.ones_like(x_local))
-    - np.tanh(a*(x_local - 80.0) * np.ones_like(x_local))
-))*(np.tanh(a*(y_local - 104.0) * np.ones_like(y_local))
-    - np.tanh(a*(y_local - 96.0) * np.ones_like(y_local)))
-u['g'] = 0.0
-v['g'] = 0.0
+dx = lambda A: d3.Differentiate(A, coords['x'])
+dy = lambda A: d3.Differentiate(A, coords['y'])
+
 
 #initial conditions but for speed ad flat surface
-H['g']=1
+b['g'] = 0
+H['g'] = 1
 v['g'] = 0.25*((
     np.tanh(a*(x_local - 120.0) * np.ones_like(x_local))
     - np.tanh(a*(x_local - 80.0) * np.ones_like(x_local))
 ))*(np.tanh(a*(y_local - 104.0) * np.ones_like(y_local))
     - np.tanh(a*(y_local - 96.0) * np.ones_like(y_local)))
+u['g'] = 0.0
+K['g'] = dy(v)['g']
 
-dx = lambda A: d3.Differentiate(A, coords['x'])
-dy = lambda A: d3.Differentiate(A, coords['y'])
-
-problem = d3.IVP([u, v, H], namespace=locals())
-
-#p=(u-(c*c)/12*(dx(dx(u))+dx(dy(v))))
-#q=(v-(c*c)/12*(dx(dy(u))+dy(dy(v))))
+problem = d3.IVP([u, v, H, K], namespace=locals())
 
 problem.add_equation(
-    "dt(u-(c*c)/12*(dx(dx(u))+dx(dy(v))))="
-    "-u*dx(u-(c*c)/12*(dx(dx(u))+dx(dy(v))))"
-    "-v*dy(u-(c*c)/12*(dx(dx(u))+dx(dy(v))))"
-    "-2*dx(u)*(u-(c*c)/12*(dx(dx(u))+dx(dy(v))))"
-    "-dx(v)*(v-(c*c)/12*(dx(dy(u))+dy(dy(v))))"
-    "-dy(v)*(u-(c*c)/12*(dx(dx(u))+dx(dy(v))))"
-    "-g_accel/c*dx(H-b)"
+    "dt(u)+ c**2/6*dx(dt(K))=" \
+    "-c**2/6*dx(K**2)" \
+    "-u*dx(u)-v*dy(u)-g_accel*dx(H-b)"
     )
 
 problem.add_equation(
-    "dt(v-(c*c)/12*(dx(dy(u))+dy(dy(v))))="
-    "-u*dx(v-(c*c)/12*(dx(dy(u))+dy(dy(v))))"
-    "-v*dy(v-(c*c)/12*(dx(dy(u))+dy(dy(v))))"
-    "-dy(u)*(u-(c*c)/12*(dx(dx(u))+dx(dy(v))))"
-    "-2*dy(v)*(v-(c*c)/12*(dx(dy(u))+dy(dy(v))))"
-    "-dx(u)*(v-(c*c)/12*(dx(dy(u))+dy(dy(v))))"
-    "-g_accel/c*dy(H-b)"
+    "dt(v) + c**2/6*dy(dt(K))=" \
+    "-c**2/6*dy(K**2)" \
+    "-u*dx(v)-v*dy(v)-g_accel*dy(H-b)"
     )
 
 problem.add_equation(
-    "dt(H)=-dx(H*u)-dy(H*v)"
+    "dt(H)=-dx(H*u)-dy(H*v)+0.1*(dx(dx(H))+dy(dy(H)))"
+    )
+
+problem.add_equation(
+    "K=-1/(2*H)*(dx(H*u)+dy(H*v))"
     )
 
 solver = problem.build_solver(dc.timesteppers.RK443)
 
-timestep = 0.002
+timestep = 0.1
 t_final = 12
-intervalsnapshot=int(t_final/(6*timestep))
+snapshotsrate = int(round(t_final/(5*timestep)))
+
 solver.stop_sim_time = t_final
 solver.stop_iteration = int(t_final / timestep) + 1
 
@@ -106,9 +95,9 @@ cfl = d3.CFL(
 cfl.add_velocity(u_vec)
 cfl.add_velocity(v_vec)
 
-Hlist=[]
-ulist=[]
-vlist=[]
+Hlist=[H.allgather_data('g')]
+ulist=[u.allgather_data('g')]
+vlist=[v.allgather_data('g')]
 
 while solver.proceed:
     # Mirror scalar u into vector proxy for CFL
@@ -117,7 +106,7 @@ while solver.proceed:
 
     dt = cfl.compute_timestep()
     solver.step(dt)
-    if solver.iteration % intervalsnapshot == 0:
+    if solver.iteration % snapshotsrate == 0:
         logger.info("Completed iteration %d at t = %.3f, dt = %.3e",
                     solver.iteration, solver.sim_time, dt)
         Hlist.append(H.allgather_data('g'))
@@ -159,7 +148,7 @@ plt.pcolormesh(speed_final)
 plt.savefig('plots/profiles_final_speed_2dgrid.png', dpi=200)
 
 plt.figure()
-fig, ax = plt.subplots(2,3,figsize=(12,6))
+fig, ax = plt.subplots(2,3)
 for i, ax in enumerate(ax.flat):
     ax.pcolormesh(Hlist[i])
 plt.savefig('plots/snapshotsH.png',dpi=200)
