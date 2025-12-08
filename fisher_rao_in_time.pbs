@@ -1,49 +1,17 @@
 #!/bin/bash
-#PBS -N proper_scoring_abc
-#PBS -l select=1:ncpus=16:mem=128gb:ngpus=1:gpu_type=L40S
-#PBS -l walltime=14:55:00
-#PBS -m abe
-#PBS -k n
+#PBS -N fisher_rao_in_time
+#PBS -l select=1:ncpus=16:mpiprocs=16:mem=16gb
+#PBS -l walltime=00:30:00
 #PBS -j oe
+#PBS -o /rds/general/user/at1824/home/fisher_rao_in_time/los-alamos/fisher_rao_in_time.$PBS_JOBID.log
 
-module purge
-module load tools/prod
-module load Python/3.10.4-GCCcore-11.3.0
+cd /rds/general/user/at1824/home/fisher_rao_in_time/los-alamos
 
-cd "$PBS_O_WORKDIR"
+source ~/miniforge3/etc/profile.d/conda.sh
+conda activate dedalus312
 
-source .venv/bin/activate
+export OMP_NUM_THREADS=1
+export NUMEXPR_MAX_THREADS=1
+export MKL_NUM_THREADS=1
 
-CONFIG_TIMESTAMP=$(python3 -c "from datetime import datetime, timezone; print(datetime.now(tz=timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'))")
-export CONFIG_TIMESTAMP
-
-CONFIG_PATH="config.json"
-
-RESULT_DIR=$(python3 -c "
-import os
-import sys
-sys.path.insert(0, '.')
-from core.config import Config
-cfg = Config('$CONFIG_PATH', timestamp=os.environ['CONFIG_TIMESTAMP'])
-print(cfg.result_directory)" 2>&1)
-
-echo "RESULT_DIR determined as: '$RESULT_DIR'"
-
-if [ -z "$RESULT_DIR" ]; then
-    echo "ERROR: RESULT_DIR is empty, using fallback"
-    RESULT_DIR="./results/fallback_$(date +%Y%m%d_%H%M%S)"
-fi
-
-mkdir -p "$RESULT_DIR"
-rm -f "$RESULT_DIR/output_gpu.log" "$RESULT_DIR/error_gpu.log" "$RESULT_DIR/gibbs_abc_gpu.o*"
-
-export PYTORCH_CUDA_ALLOC_CONF=backend:native
-
-export N_WORKERS=16
-export PARALLEL_BACKEND=thread
-
-echo "Running at $(date -u) on $(hostname)"
-echo "CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES"
-nvidia-smi
-
-python main.py > "$RESULT_DIR/output_gpu.log" 2> "$RESULT_DIR/error_gpu.log"
+mpirun -np 16 python 2d.py
