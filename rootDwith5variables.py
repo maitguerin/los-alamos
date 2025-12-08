@@ -140,31 +140,31 @@ y_global = ybasis.global_grid(dist, scale=1)
 plt.figure()
 plt.plot(x_global,u_final[:,int(Nx/2)])
 plt.plot(x_global,H_final[:,int(Nx/2)])
-plt.savefig('plots/profiles_final_2d_throughcentrey.png', dpi=200)
+plt.savefig('hpc_plots/profiles_final_2d_throughcentrey.png', dpi=200)
 
 plt.figure()
 plt.plot(x_global,v_final[int(Ny/2),:])
 plt.plot(x_global,H_final[int(Ny/2),:])
-plt.savefig('plots/profiles_final_2d_throughcentrex.png', dpi=200)
+plt.savefig('hpc_plots/profiles_final_2d_throughcentrex.png', dpi=200)
 
 plt.figure()
 plt.pcolormesh(H_final)
-plt.savefig('plots/profiles_final_2dgrid.png', dpi=200)
+plt.savefig('hpc_plots/profiles_final_2dgrid.png', dpi=200)
 
 plt.figure()
 plt.pcolormesh(u_final)
-plt.savefig('plots/profiles_final_u_2dgrid.png', dpi=200)
+plt.savefig('hpc_plots/profiles_final_u_2dgrid.png', dpi=200)
 
 plt.figure()
 plt.pcolormesh(v_final)
-plt.savefig('plots/profiles_final_v_2dgrid.png', dpi=200)
+plt.savefig('hpc_plots/profiles_final_v_2dgrid.png', dpi=200)
 
 plt.figure()
 plt.pcolormesh(speed_final)
-plt.savefig('plots/profiles_final_speed_2dgrid.png', dpi=200)
+plt.savefig('hpc_plots/profiles_final_speed_2dgrid.png', dpi=200)
 
 plt.figure()
 fig, ax = plt.subplots(2,3)
 for i, ax in enumerate(ax.flat):
     ax.pcolormesh(Hlist[i])
-plt.savefig('plots/snapshotsH.png',dpi=200)
+plt.savefig('hpc_plots/snapshotsH.png',dpi=200)
