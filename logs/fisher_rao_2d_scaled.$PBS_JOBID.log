@@ -1,0 +1,14 @@
+Host key verification failed.
+[mpiexec@cx3-3-11] ui_cmd_cb (mpiexec/pmiserv_pmci.c:51): Launch proxy failed.
+[mpiexec@cx3-3-11] HYDT_dmxu_poll_wait_for_event (lib/tools/demux/demux_poll.c:76): callback returned error status
+[mpiexec@cx3-3-11] HYD_pmci_wait_for_completion (mpiexec/pmiserv_pmci.c:180): error waiting for event
+[mpiexec@cx3-3-11] main (mpiexec/mpiexec.c:260): process manager error waiting for completion
+
+====================================
+CPU Time used: 00:00:00
+CPU Percent: 0%
+Memory usage: 0b
+Approx Power usage: 0.0
+Walltime usage: 00:00:12
+
+====================================
