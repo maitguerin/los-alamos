@@ -1,19 +1,20 @@
 #!/bin/bash
 #PBS -N fisher_rao_2d_scaled
-#PBS -l select=1:ncpus=32:mpiprocs=32:mem=64gb
-#PBS -l walltime=02:00:00
+#PBS -l select=1:ncpus=16:mpiprocs=16:mem=32gb
+#PBS -l walltime=04:00:00
 #PBS -j oe
-#PBS -o /rds/general/user/at1824/home/fisher_rao_in_time/los-alamos/logs/fisher_rao_2d_scaled.$PBS_JOBID.log
+#PBS -o /rds/general/user/at1824/home/fisher_rao_in_time/los-alamos/fisher_rao_2d_scaled.$PBS_JOBID.log
 
 cd /rds/general/user/at1824/home/fisher_rao_in_time/los-alamos
 
-mkdir -p logs
-mkdir -p plots
-
-source ~/miniforge3/etc/profile.d/conda.sh
-conda activate dedalus312
+source ~/miniforge3/bin/activate dedalus312
 
 export OMP_NUM_THREADS=1
 export NUMEXPR_MAX_THREADS=1
+export OPENBLAS_NUM_THREADS=1
+export MKL_NUM_THREADS=1
 
-mpiexec -n "${PBS_NP}" python 2d_hpc.py
+# Avoid SSH-based launch on a single node (fixes "Host key verification failed")
+export HYDRA_BOOTSTRAP=fork
+
+mpiexec -n 16 python 2d_hpc.py
