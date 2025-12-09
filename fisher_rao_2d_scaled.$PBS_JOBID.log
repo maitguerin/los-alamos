@@ -1,0 +1,23 @@
+2025-12-09 11:21:01,003 __main__ 0/16 INFO :: Starting 2D shallow water run with 16 MPI ranks
+2025-12-09 11:21:01,210 __main__ 0/16 INFO :: Local grid shapes: x_local (1024, 1), y_local (1, 64)
+=>> PBS: job killed: walltime 14458 exceeded limit 14400
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   PID 2967296 RUNNING AT cx3-14-12.cx3.hpc.ic.ac.uk
+=   EXIT CODE: 15
+=   CLEANING UP REMAINING PROCESSES
+=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
+===================================================================================
+YOUR APPLICATION TERMINATED WITH THE EXIT STRING: Terminated (signal 15)
+This typically refers to a problem with your application.
+Please see the FAQ page for debugging suggestions
+
+====================================
+CPU Time used: 60:12:05
+CPU Percent: 1592%
+Memory usage: 3808340kb
+Approx Power usage: 0.7224
+Walltime usage: 04:01:09
+
+====================================

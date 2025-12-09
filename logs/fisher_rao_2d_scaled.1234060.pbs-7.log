@@ -1,0 +1,78 @@
+Running in: /rds/general/user/at1824/home/fisher_rao_in_time/los-alamos
+Job ID: 1234060.pbs-7
+Node file:
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+cx3-6-14.cx3.hpc.ic.ac.uk
+Warning: Permanently added 'cx3-6-14.cx3.hpc.ic.ac.uk' (ED25519) to the list of known hosts.
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+Permission denied, please try again.
+Permission denied, please try again.
+at1824@cx3-6-14.cx3.hpc.ic.ac.uk: Permission denied (gssapi-keyex,gssapi-with-mic,password,hostbased).
+[mpiexec@cx3-6-14] ui_cmd_cb (mpiexec/pmiserv_pmci.c:51): Launch proxy failed.
+[mpiexec@cx3-6-14] HYDT_dmxu_poll_wait_for_event (lib/tools/demux/demux_poll.c:76): callback returned error status
+[mpiexec@cx3-6-14] HYD_pmci_wait_for_completion (mpiexec/pmiserv_pmci.c:180): error waiting for event
+[mpiexec@cx3-6-14] main (mpiexec/mpiexec.c:260): process manager error waiting for completion
