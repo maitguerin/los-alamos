@@ -1,0 +1,25 @@
+2025-12-08 17:45:29,604 subsystems 0/16 INFO :: Building subproblem matrices 1/16 (~6%) Elapsed: 0s, Remaining: 0s, Rate: 4.4e+01/s
+2025-12-08 17:45:29,614 subsystems 0/16 INFO :: Building subproblem matrices 2/16 (~12%) Elapsed: 0s, Remaining: 0s, Rate: 6.0e+01/s
+2025-12-08 17:45:29,634 subsystems 0/16 INFO :: Building subproblem matrices 4/16 (~25%) Elapsed: 0s, Remaining: 0s, Rate: 7.5e+01/s
+2025-12-08 17:45:29,654 subsystems 0/16 INFO :: Building subproblem matrices 6/16 (~38%) Elapsed: 0s, Remaining: 0s, Rate: 8.2e+01/s
+2025-12-08 17:45:29,674 subsystems 0/16 INFO :: Building subproblem matrices 8/16 (~50%) Elapsed: 0s, Remaining: 0s, Rate: 8.6e+01/s
+2025-12-08 17:45:29,695 subsystems 0/16 INFO :: Building subproblem matrices 10/16 (~62%) Elapsed: 0s, Remaining: 0s, Rate: 8.8e+01/s
+2025-12-08 17:45:29,714 subsystems 0/16 INFO :: Building subproblem matrices 12/16 (~75%) Elapsed: 0s, Remaining: 0s, Rate: 9.0e+01/s
+2025-12-08 17:45:29,734 subsystems 0/16 INFO :: Building subproblem matrices 14/16 (~88%) Elapsed: 0s, Remaining: 0s, Rate: 9.1e+01/s
+2025-12-08 17:45:29,754 subsystems 0/16 INFO :: Building subproblem matrices 16/16 (~100%) Elapsed: 0s, Remaining: 0s, Rate: 9.2e+01/s
+2025-12-08 17:48:12,751 __main__ 0/16 INFO :: Completed iteration 1000 at t = 2.000, dt = 2.000e-03
+2025-12-08 17:51:00,529 __main__ 0/16 INFO :: Completed iteration 2000 at t = 4.000, dt = 2.000e-03
+2025-12-08 17:53:44,321 __main__ 0/16 INFO :: Completed iteration 3000 at t = 6.000, dt = 2.000e-03
+2025-12-08 17:56:27,697 __main__ 0/16 INFO :: Completed iteration 4000 at t = 8.000, dt = 2.000e-03
+2025-12-08 17:59:10,541 __main__ 0/16 INFO :: Completed iteration 5000 at t = 10.000, dt = 2.000e-03
+2025-12-08 18:01:54,014 __main__ 0/16 INFO :: Completed iteration 6000 at t = 12.000, dt = 2.000e-03
+2025-12-08 18:01:54,035 solvers 0/16 INFO :: Simulation stop time reached.
+
+====================================
+CPU Time used: 04:00:41
+CPU Percent: 1582%
+Memory usage: 6395664kb
+Approx Power usage: 0.048
+Walltime usage: 00:17:21
+
+====================================

@@ -1,0 +1,17 @@
+#!/bin/bash
+#PBS -N fisher_rao_in_time
+#PBS -l select=1:ncpus=16:mpiprocs=16:mem=16gb
+#PBS -l walltime=00:30:00
+#PBS -j oe
+#PBS -o /rds/general/user/at1824/home/fisher_rao_in_time/los-alamos/fisher_rao_in_time.$PBS_JOBID.log
+
+cd /rds/general/user/at1824/home/fisher_rao_in_time/los-alamos
+
+source ~/miniforge3/etc/profile.d/conda.sh
+conda activate dedalus312
+
+export OMP_NUM_THREADS=1
+export NUMEXPR_MAX_THREADS=1
+export MKL_NUM_THREADS=1
+
+mpirun -np 16 python 2d.py
