@@ -1,20 +1,28 @@
 #!/bin/bash
-#PBS -N fisher_rao_2d_scaled
-#PBS -l select=1:ncpus=16:mpiprocs=16:mem=32gb
+#PBS -N fisher_rao_2d_1024_medium64
+# Single node, 64 cores, 64 GB
+#PBS -l select=1:ncpus=64:mem=64gb
+# Walltime <= 24h so it will route into medium24
 #PBS -l walltime=04:00:00
+
+# Merge stdout and stderr
 #PBS -j oe
-#PBS -o /rds/general/user/at1824/home/fisher_rao_in_time/los-alamos/fisher_rao_2d_scaled.$PBS_JOBID.log
+# Send output to logs/, with jobid in the name
+# The directory must exist before submission
+#PBS -o logs/fisher_rao_2d_1024_medium64.$PBS_JOBID.log
 
-cd /rds/general/user/at1824/home/fisher_rao_in_time/los-alamos
+# Always start from the submission directory
+cd "$PBS_O_WORKDIR"
 
-source ~/miniforge3/bin/activate dedalus312
+# Load conda and activate your Dedalus environment
+source "$HOME/miniforge3/etc/profile.d/conda.sh"
+conda activate dedalus312
 
+# Enforce 1 thread per rank for BLAS / OpenMP etc.
 export OMP_NUM_THREADS=1
-export NUMEXPR_MAX_THREADS=1
 export OPENBLAS_NUM_THREADS=1
 export MKL_NUM_THREADS=1
+export NUMEXPR_MAX_THREADS=1
 
-# Avoid SSH-based launch on a single node (fixes "Host key verification failed")
-export HYDRA_BOOTSTRAP=fork
-
-mpiexec -n 16 python 2d_hpc.py
+# PBS_NP == total number of cores allocated (here 64)
+mpiexec -n "$PBS_NP" python 2d_hpc.py
