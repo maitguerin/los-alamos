@@ -1,28 +1,33 @@
 #!/bin/bash
-#PBS -N fisher_rao_2d_1024_medium64
-# Single node, 64 cores, 64 GB
-#PBS -l select=1:ncpus=64:mem=64gb
-# Walltime <= 24h so it will route into medium24
+#PBS -N fisher_rao_2d_large
+# Single-node, 64 MPI ranks, moderate memory
+#PBS -l select=1:ncpus=64:mpiprocs=64:mem=120gb
+# up to 4 hours walltime
 #PBS -l walltime=04:00:00
-
-# Merge stdout and stderr
+# merge stdout and stderr
 #PBS -j oe
-# Send output to logs/, with jobid in the name
-# The directory must exist before submission
-#PBS -o logs/fisher_rao_2d_1024_medium64.$PBS_JOBID.log
 
-# Always start from the submission directory
+# Ensure a deterministic log file name with the true jobid
 cd "$PBS_O_WORKDIR"
+mkdir -p logs
 
-# Load conda and activate your Dedalus environment
-source "$HOME/miniforge3/etc/profile.d/conda.sh"
-conda activate dedalus312
+JOBID="${PBS_JOBID:-$$}"
+exec >"logs/fisher_rao_2d_scaled.${JOBID}.log" 2>&1
 
-# Enforce 1 thread per rank for BLAS / OpenMP etc.
+echo "Running in: $(pwd)"
+echo "Job ID: ${JOBID}"
+echo "Node file:"
+cat "$PBS_NODEFILE"
+
+# Load your conda environment
+source ~/miniforge3/bin/activate dedalus312
+
+# Dedalus strongly prefers OMP_NUM_THREADS=1 when using MPI
 export OMP_NUM_THREADS=1
-export OPENBLAS_NUM_THREADS=1
-export MKL_NUM_THREADS=1
 export NUMEXPR_MAX_THREADS=1
 
-# PBS_NP == total number of cores allocated (here 64)
-mpiexec -n "$PBS_NP" python 2d_hpc.py
+# Unbuffered Python so logs are flushed as we go
+export PYTHONUNBUFFERED=1
+
+# Run Dedalus with 64 MPI ranks
+mpiexec -n 64 python -u 2d_hpc.py
