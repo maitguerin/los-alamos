@@ -1,0 +1,21 @@
+Running in: /rds/general/user/at1824/home/fisher_rao_in_time/los-alamos
+Job ID: 1234786.pbs-7
+Node file:
+cx3-6-15.cx3.hpc.ic.ac.uk
+Python in use: /rds/general/user/at1824/home/miniforge3/envs/dedalus312/bin/python
+mpiexec in use: /rds/general/user/at1824/home/miniforge3/envs/dedalus312/bin/mpiexec
+Python 3.12.12
+Starting MPI run with 64 ranks...
+2025-12-09 16:26:22,261 __main__ 0/64 INFO :: Starting 2D shallow water run with 64 MPI ranks
+2025-12-09 16:26:22,273 __main__ 0/64 INFO :: Local grid shapes: x_local (1024, 1), y_local (1, 16)
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   PID 3472852 RUNNING AT cx3-6-15.cx3.hpc.ic.ac.uk
+=   EXIT CODE: 15
+=   CLEANING UP REMAINING PROCESSES
+=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
+===================================================================================
+YOUR APPLICATION TERMINATED WITH THE EXIT STRING: Terminated (signal 15)
+This typically refers to a problem with your application.
+Please see the FAQ page for debugging suggestions

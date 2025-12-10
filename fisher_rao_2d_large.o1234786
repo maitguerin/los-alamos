@@ -1,0 +1,11 @@
+Logging to: logs/fisher_rao_2d_scaled.1234786.pbs-7.log
+=>> PBS: job killed: walltime 14469 exceeded limit 14400
+
+====================================
+CPU Time used: 253:58:00
+CPU Percent: 6347%
+Memory usage: 10613472kb
+Approx Power usage: 3.0476
+Walltime usage: 04:01:20
+
+====================================
