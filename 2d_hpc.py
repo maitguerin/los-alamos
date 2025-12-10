@@ -33,9 +33,8 @@ if rank == 0:
 Lx = 200.0
 Ly = 200.0
 
-# scaled-up resolution
-Nx = 1024
-Ny = 1024
+Nx = 768
+Ny = 768
 
 dtype = np.float64
 
@@ -144,7 +143,7 @@ problem.add_equation("dt(H) = -dx(H*u) - dy(H*v)")
 solver = problem.build_solver(dc.timesteppers.RK443)
 
 timestep_initial = 0.002
-t_final = 20.0
+t_final = 12.0
 
 intervalsnapshot = int(t_final / (6.0 * timestep_initial))
 solver.stop_sim_time = t_final

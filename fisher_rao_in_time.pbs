@@ -1,25 +1,16 @@
 #!/bin/bash
-#PBS -N fisher_rao_2d_large
-# Single node, 64 cores, 200GB RAM
-# (routes automatically into a suitable medium/large queue)
+#PBS -N fisher_rao_2d_scaled
 #PBS -l select=1:ncpus=64:mem=200gb
-# Walltime: adjust once you have some timing data
 #PBS -l walltime=04:00:00
-
-# Join stdout/stderr in one stream
 #PBS -j oe
 
-# Change to the submission directory
 cd "$PBS_O_WORKDIR"
 
-# Ensure log directory exists
 mkdir -p logs
 
-# Properly expand PBS_JOBID in the logfile name
 LOGFILE="logs/fisher_rao_2d_scaled.${PBS_JOBID}.log"
 echo "Logging to: ${LOGFILE}"
 
-# Redirect stdout/stderr to the logfile
 exec >"${LOGFILE}" 2>&1
 
 echo "Running in: $(pwd)"
@@ -27,27 +18,19 @@ echo "Job ID: ${PBS_JOBID}"
 echo "Node file:"
 cat "${PBS_NODEFILE}"
 
-# Load baseline tools if desired (harmless for conda)
 module load tools/prod
 
-# Activate Dedalus environment
 source "${HOME}/miniforge3/bin/activate" dedalus312
 
-# For Dedalus FFTs, we keep threading off and let MPI handle parallelism
 export OMP_NUM_THREADS=1
 export NUMEXPR_MAX_THREADS=1
 
-# *** Critical work-around for CX3 ***
-# Tell Hydra to avoid SSH and just fork processes locally on this node.
-# This is supported by Hydra and removes the SSH requirement.
 export HYDRA_BOOTSTRAP=fork
 
-# Sanity checks
 echo "Python in use: $(which python)"
 echo "mpiexec in use: $(which mpiexec)"
 python -V
 
-# Use all 64 allocated cores as MPI ranks
 NP=64
 
 echo "Starting MPI run with ${NP} ranks..."
